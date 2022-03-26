@@ -1,0 +1,302 @@
+<?php 
+include "koneksi.php";
+ ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+		<link rel="stylesheet" type="text/css" href="user.css">
+
+	<div class="navbar">
+			<ul>
+				<li><a href="index.php">HOME</a></li>
+				<li><a href="keranjang.php">CART</a></li>
+				<li><a href="checkout.php">CHECKOUT</a></li>
+				<li class="logo"><h2>WIPERS</h2></li>
+				<li class="logo1"><h2>TYLE</h2></li>
+				<!-- jika sudah login/ada session pelanggan -->
+				<?php if (isset($_SESSION["pelanggan"])):  ?>
+					<li class="logout"><button><a href="logoutpelanggan.php">LOGOUT</a></button></li>
+				<?php else: ?>
+
+					<!-- selain itu jika belum login atau belum ada session login -->
+					
+						<!-- Trigger/Open The Modal -->
+					<li><button id="myBtn" class="login"><b>LOGIN</b></button></li>
+					<!-- <li><a href="loginpelanggan.php">Login</a></li> -->
+					<li><button id="myBtn1" class="daftar"><b>DAFTAR</b></button></li>
+				<?php endif ?>
+			</ul>
+	</div>	
+
+
+<!-- Modal login-->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="container">
+		<div class="body-form">
+			<form method="POST">
+				<div class="content">
+					<div class="title">
+						<h3>LOGIN TO WIPERSTYLE</h3><br><br><br>
+					</div>
+					<input type="email" name="email" placeholder="EMAIL"><br><br>
+					<input type="password" name="password" placeholder="PASSWORD"><br>
+				</div>
+				<div class="tombol">
+					<button name="simpan">LOGIN</button>
+				</div>
+			</form>
+		</div>
+	</div>
+  </div>
+</div>
+
+
+
+
+
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #1FBBA6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logout button {
+	margin-left: 250px;
+	padding: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: center;
+	background-color: #1FBBA6;
+	border: 2px solid #1FBBA6;
+}
+
+.logout button:hover{
+	background-color: white;
+	color: #1FBBA6;
+}
+
+
+</style>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+<!-- tutup modal login -->
+
+
+
+
+
+
+
+<!-- buka modal daftar -->
+
+<!-- The Modal -->
+<div id="myModal1" class="modal1">
+
+  <!-- Modal content -->
+  <div class="modal-content1">
+  	<div class="title1">
+  		<h3>CREATE ACCOUNT</h3>
+  		 <span class="close1">&times;</span>
+  	</div><br><br><br><br>
+    <div class="container">
+		<form method="POST">
+		<input type="email" name="email" placeholder="EMAIL" required>
+		<br><br>
+		<input type="password" name="password" placeholder="PASSWORD">
+		<br><br>
+		<input type="text" name="nama" placeholder="NAMA">
+		<br><br>
+		<input type="number" name="telepon" placeholder="TELEPON">
+		<br><br>
+		<textarea name="alamat" placeholder="ALAMAT"></textarea>
+		<br><br>
+		<button name="daftar">Daftar</button>
+	</form>
+	</div>
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal1 = document.getElementById("myModal1");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn1");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close1")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal1.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal1.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+}
+</script>
+
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+
+.modal1 {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+/* Modal Content */
+.modal-content1 {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35%;
+}
+
+.modal-content1 input{
+	width: 238%;
+	height: 60px;
+	text-align: center;
+}
+
+.modal-content1 input:focus{
+	border:1px solid #1FBBA6;
+	margin-left: 10px;
+	margin-right: -10px;
+}
+
+.modal-content1 textarea{
+	width: 238%;
+	height: 80px;
+	text-align: center;
+}
+
+.modal-content1 button{
+	margin-top: 10px;
+	width: 238%;
+	height: 60px;
+	color: white;
+	font-size: 30px;
+	text-align: center;
+	font-family: Razor;
+	background-color: #2D94B6;
+	border: 1px solid #2D94B6;
+}
+
+
+.modal-content1 button:hover{
+	background-color: #007087;
+	border: 1px solid #007087;
+
+}
+
+/* The Close Button */
+.close1 {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #007087;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+<!-- tutup modal daftar -->
+
+</body>
+</html>

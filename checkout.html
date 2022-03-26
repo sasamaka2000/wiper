@@ -1,0 +1,266 @@
+<?php 
+session_start();
+include "koneksi.php";
+
+// jika belum login pelanggan akan di kembalikan ke halaman login
+if (!isset($_SESSION["pelanggan"])) {
+	echo "<script>alert('silahkan login')</script>";
+	echo "<script>location('index.php')</script>";
+	}
+
+ ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>checkout</title>
+	<link rel="stylesheet" type="text/css" href="user.css">
+
+</head>
+<body>
+	<!-- navbar -->
+	<?php 
+		include "menu.php";
+	 ?>
+	<!-- tutup navbar -->
+
+	<?php 
+
+	// jika keranjang kosong maka akan dikembalikan ke toko
+if (empty($_SESSION['keranjang']) or !isset($_SESSION['keranjang']))
+ {
+ 	echo "<script>alert('keranjang kosong anda tidak bisa melakukan Checkout (silahkan belanja)')</script>";
+	echo "<script>location('index.php')</script>";
+
+}
+	 ?>
+
+			<section class="konten">
+ 			<div class="container">
+ 				<h1>Check<span>out</span></h1>
+ 				<table border="1" cellspacing="0" cellpadding="0">
+ 					<thead>
+ 						<tr>
+ 							<th class="no">NO</th>
+ 							<th class="foto">Foto</th>
+ 							<th class="produk">Produk</th>
+ 							<th class="harga">Harga</th>
+ 							<th class="jumlah">Jumlah</th>
+ 							<th class="subharga">Subharga</th>
+ 						</tr>
+ 					</thead>
+ 					<tbody>
+ 						<?php $total=0; ?>
+ 						<?php $id=1; ?>
+ 						<!-- digunakan untuk perulangan dalam bentuk array (tanpa perlu variable count)  -->
+ 						<?php foreach ($_SESSION['keranjang'] as $id_produk => $Jumlah): ?>
+
+ 						 <!-- variabel jumlah diambil dari jumlah produk yang dibeli -->
+ 						
+ 						<?php //menampilkan produk yang sedang di perulangkan berdasar kan id_produk
+ 						$ambil=mysqli_query($koneksi, "SELECT * FROM produk WHERE id_produk='$id_produk'");
+ 						//id_produk diambil dari $jumlah
+
+ 						$pecah=mysqli_fetch_assoc($ambil);
+ 						$subharga=$pecah["harga_produk"]*$Jumlah;
+
+ 						// untuk menampilkan data
+ 						?>
+ 						<tr>
+ 							<td><?php echo $id; ?></td>
+ 							<td><img src="foto_produk/<?php echo $pecah['foto_produk'];?>"></td>
+ 							<td><?php echo $pecah['nama_produk']; ?></td>
+ 							<td>RP <?php echo number_format($pecah['harga_produk']); ?></td>
+ 							<td><?php echo $Jumlah ; ?></td>
+ 							<td>RP <?php echo number_format($subharga); ?></td>
+ 						</tr>
+ 						<?php $id++; ?>
+ 						<?php $total+=$subharga; ?>
+ 						<?php endforeach ?>
+ 					</tbody>	
+ 					<tfoot>
+ 						<tr>
+ 							<td colspan="5" class="total">total harga</td>
+ 							<td>RP. <?php echo number_format($total) ?> </td>
+ 						</tr>
+ 					</tfoot>
+ 								
+ 				</table>
+ 					<!-- informasi pelanggan yang ingin checkout -->
+ 				<form method="POST">
+ 					<div class="nama">
+ 						<input type="text" value="<?php echo $_SESSION['pelanggan']['nama_pelanggan'] ?>">
+ 					</div>
+ 					<div class="tlpon">
+ 						<input type="text" value="<?php echo $_SESSION['pelanggan']['telepon_pelanggan'] ?>">
+ 					</div>
+ 					<!-- tarif -->
+ 					<div class="tarif">
+ 						<select name="id_ongkir">
+	 							<option value="">    <span>pilih tarif</span></option>
+	 						<?php $ambil=mysqli_query($koneksi, "SELECT * FROM ongkir"); ?>
+	 						<?php 
+	 						while ($perongkir=mysqli_fetch_assoc($ambil)){
+	 						?>
+
+	 							<option value="<?php echo $perongkir['id_ongkir']; ?>">
+	 								<?php echo $perongkir['nama_kota']; ?>-
+	 								RP <?php echo number_format($perongkir['tarif_ongkir']); ?>	
+	 							</option>
+
+	 						<?php } ?>
+
+ 						</select>
+ 					</div>
+ 					<button name="checkout">Checkout</button>
+ 					
+ 				</form>
+
+ 				<?php 
+
+ 					if (isset($_POST["checkout"])) 
+ 					{
+ 						$id_pelanggan = $_SESSION['pelanggan']['id_pelanggan'];
+ 						$id_ongkir = $_POST['id_ongkir'];
+ 						$tanggal_pembelian = date("y-m-d");
+
+ 						$ambil = mysqli_query($koneksi, "SELECT * FROM ongkir WHERE id_ongkir= '$id_ongkir'");
+ 						$arrayongkir = mysqli_fetch_assoc($ambil);
+ 						$tarif = $arrayongkir['tarif_ongkir'];
+
+ 						$total_pembelian = $total + $tarif;
+
+ 						//menyimpan data ke table pembelian
+ 						mysqli_query($koneksi, "INSERT INTO pembelian (id_pelanggan,id_ongkir,tanggal_pembelian,total_pembelian) VALUES ('$id_pelanggan','$id_ongkir','$tanggal_pembelian','$total_pembelian') "); 
+
+ 						// mendapatkan id_pembelian yang berusan terjadi
+ 						$id_pembelian_barusan = mysqli_insert_id($koneksi);
+
+ 						foreach ($_SESSION["keranjang"] as $id_produk => $jumlah) 
+ 						{
+ 							mysqli_query($koneksi, "INSERT INTO pembelian_produk (id_pembelian,id_produk,jumlah) VALUES ('$id_pembelian_barusan','$id_produk',$jumlah) ");
+ 						}
+ 						//mengkosongkan keranjang setelah pembayaran
+ 						unset($_SESSION['keranjang']); 
+
+
+ 						// tampilan di alihkan kehalaman tagihan, tagihan dari pembelian barusan
+ 						echo "<script>alert('pembelian sukses')</script>";
+						echo "<script>location='tagihan.php?id=$id_pembelian_barusan'</script>";
+ 					}
+
+ 					// include "footer.php";
+
+ 				 ?>
+ 			</div>
+ 		</section>	
+
+ 		<style type="text/css">
+ 			.container{
+ 				margin-top: 150px;
+ 			}
+
+ 			.container table{
+ 				text-align: center;
+ 				margin-left: 110px;
+ 				border: 1px solid white;
+ 			}
+
+ 			.container table tr td img{
+ 				width: 200px;
+ 			}
+
+ 			.no{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 				padding-top: 6px;
+ 				padding-bottom: 6px;
+ 			}
+
+			.foto{
+ 				padding-right: 70px;
+ 				padding-left: 70px;
+ 			}
+
+ 			.produk{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.harga{
+ 				padding-right: 40px;
+ 				padding-left: 40px;
+ 			}
+
+ 			.jumlah{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.subharga{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.total{
+ 				padding: 12px;
+ 			}
+
+ 			.container h1{
+ 				margin-left: 110px;
+ 				font-family: verdana;
+ 				color: #1FBBA6;
+ 			}
+
+ 			.container span{
+ 				color: pink;
+ 			}
+
+ 			form input{
+ 				width: 230px;
+ 				text-align: center;
+ 				height: 30px;
+ 				margin-left: 30px;
+ 				border: 1px solid #ecf0f1;
+ 				margin-bottom: 10px;
+ 			}
+
+ 			form select{
+ 				width: 230px;
+ 				height: 30px;
+ 				margin-left: 30px;
+ 				border: 1px solid #ecf0f1;
+ 			}
+
+ 			form button{
+ 				width: 260px;
+ 				height: 30px;
+ 				margin-left: 16px;
+ 				margin-top: 10px;
+ 				background-color: #1FBBA6;
+ 				border: 1px solid #1FBBA6;
+ 				font-family: verdana;
+ 				font-size: 19px;
+ 				color: white;
+ 			}
+
+ 			form button:hover{
+ 				background-color: #16a085;
+ 				border: 1px solid #16a085;
+ 			}
+
+ 			form{
+
+ 				width: 300px;
+ 				border: 1px solid #ecf0f1;
+ 				padding-top: 10px;
+ 				padding-bottom: 10px;
+ 				background-color: #ecf0f1;
+ 				position: relative;
+ 				left: 950px;
+ 				bottom: 330px;
+ 			}
+
+ 		</style>
+</body>
+</html>

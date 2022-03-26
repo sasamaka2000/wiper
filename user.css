@@ -1,0 +1,135 @@
+*{
+	 padding:  0px;
+	 margin: 0px;
+	 box-sizing: border-box;
+	 font-color:black;
+}
+
+.navbar{
+	width: 100%;
+	padding: 18px;
+	background-color: white;
+	border-top: 2px solid #1FBBA6;
+	
+	/*border: 1px solid #1CFFBC;*/
+	position: fixed;
+}
+
+.navbar ul li{
+			list-style-type: none;
+	 		display: inline-block;
+	 		padding: 10px 30px;
+	 		color: black;
+	 		font-size: 15px;
+	 		/*font-family: sans-serif;*/
+	 		cursor: pointer;
+	 		transition: .5s;
+	 		margin-left: 10px
+}
+
+.navbar ul li a:hover{
+	color:#1FBBA6; 
+}
+
+.container{
+	display: inline-block;
+}
+
+
+
+.login{
+	margin-left: 150px;
+	width: 90px;
+	height: 30px;
+	border: 1px solid #1FBBA6;
+	background-color: white;
+	color: #1FBBA6;
+}
+
+.login:hover{
+background-color: #1FBBA6;
+color: white;
+}
+
+.daftar{
+	width: 90px;
+	height: 30px;
+	margin-left: -50px;
+	color: white;
+	background-color: #1FBBA6;
+	border: 1px solid #1FBBA6;
+}
+
+.daftar:hover{
+	background-color: white;
+	color: #1FBBA6;
+}
+
+.navbar ul li a{
+	text-decoration: none;
+	color: black;
+}
+
+.logo h2{
+	margin-left: 100px;
+	font-family:Kolikö;
+	font-size: 40px;
+}
+
+.logo1 h2{
+	margin-left: -75px;
+	font-size: 25px;
+}
+
+/*login*/
+.modal-content  input{
+	width: 125%;
+	height: 60px;
+	text-align: center;
+}
+
+.modal-content input:focus{
+	border:1px solid #1FBBA6;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.tombol button{
+	margin-top: 10px;
+	width: 125%;
+	height: 60px;
+	color: white;
+	font-size: 30px;
+	text-align: center;
+	font-family: Razor;
+	background-color: #2D94B6;
+	border: 1px solid #2D94B6;
+}
+
+
+.tombol button:hover{
+	background-color: #007087;
+	border: 1px solid #007087;
+
+}
+
+.title h3{
+	font-family: Razor;
+}
+
+/*tutup login*/
+
+/*daftar*/
+.container input{
+
+}
+
+
+
+/*tutup daftar*/
+
+
+
+
+
+

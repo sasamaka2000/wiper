@@ -1,0 +1,72 @@
+<?php 
+
+session_start();
+include "koneksi.php";
+ ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>login pelanggan</title>
+	<link rel="stylesheet" type="text/css" href="user.css">
+</head>
+<body>
+	<!-- navbar -->
+	<?php 
+		include "menu.php";
+	 ?>
+	<!-- tutup navbar -->
+
+	<div class="container">
+		<div class="bg-behind">
+			<h3>login pelanggan</h3>
+		</div>
+		<div class="body-form">
+			<form method="POST">
+				<div class="content">
+					<label for="email">Email</label>
+					<input type="email" name="email"><br>
+					<label for="password">password</label>
+					<input type="password" name="password">
+				</div>
+				<div class="tombol">
+					<button name="simpan">simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<?php 
+	// jika ada tombol simpan/tombol simpan ditekan
+	if (isset($_POST["simpan"])) 
+	{
+		$email=$_POST["email"];
+		$password=$_POST["password"];
+
+		// lakuan query untuk memeriksa akun ditabel pelanggan yang ada di batabase
+		$ambil=mysqli_query($koneksi, "SELECT * FROM pelanggan WHERE email_pelanggan='$email' AND password_pelanggan='$password'");
+
+		// menghitung akun yang terammbil
+		$cocok = mysqli_num_rows($ambil);
+
+		// jika ada akun yang cocok, maka di loginkan
+		if ($cocok==1) {
+			// anda sukses login
+			$akun = mysqli_fetch_assoc($ambil);
+
+			// simpan ke session pelanggan
+			$_SESSION['pelanggan'] = $akun;
+			echo "<script>alert('anda suksek login')</script>";
+			echo "<script>location('index.php')</script>"; 
+		}	
+		else{
+			// jika anda gagal login
+			echo "<script>alert('anda gagal login')</script>";
+			echo "<script>location('index.php')</script>";
+		}
+	}
+
+	 ?>
+
+</body>
+</html>

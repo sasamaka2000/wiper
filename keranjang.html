@@ -1,0 +1,190 @@
+
+<!-- teliti lagi -->
+<?php 
+session_start();
+
+include "koneksi.php";
+
+
+// jika keranjang kosong maka akan dikembalikan ke toko
+if (empty($_SESSION['keranjang']) or !isset($_SESSION['keranjang']))
+ {
+ 	echo "<script>alert('keranjang anda kosong (silahkan belanja)')</script>";
+	echo "<script>location('index.php')</script>";
+}
+
+ ?>
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title>keranjang</title>
+ </head>
+ <body>
+ 	<link rel="stylesheet" type="text/css" href="user.css">
+
+ 		<!-- navbar -->
+	<?php 
+		include "menu.php";
+	 ?>
+	 <br><br><br><br><br><br><br><br><br><br><br><br>
+	<!-- tutup navbar -->
+
+ 		<section class="konten">
+ 			<div class="container">
+ 				<h1>Shopping <span>cart</span></h1>
+ 				<br>
+ 				<table border="1" cellspacing="0" cellpadding="6">
+ 					<thead>
+ 						<tr>
+ 							<th class="no">NO</th>
+ 							<th class="foto">Foto</th>
+ 							<th class="produk">Produk</th>
+ 							<th class="harga">Harga</th>
+ 							<th class="jumlah">Jumlah</th>
+ 							<th class="subharga">Subharga</th>
+ 							<th class="aksi">Aksi</th>
+ 						</tr>
+ 					</thead>
+ 					<tbody>
+ 						<?php $id=1; ?>
+ 						<!-- digunakan untuk perulangan dalam bentuk array (tanpa perlu ariable count)  -->
+ 						<?php foreach ($_SESSION['keranjang'] as $id_produk => $Jumlah): ?>
+
+ 						 <!-- variabel jumlah diambil dari jumlah produk yang dibeli -->
+ 						
+ 						<?php //menampilkan produk yang sedang di perulangkan berdasar kan id_produk
+ 						$ambil=mysqli_query($koneksi, "SELECT * FROM produk WHERE id_produk='$id_produk'");
+ 						//id_produk diambil dari $jumlah
+
+ 						$pecah=mysqli_fetch_assoc($ambil);
+ 						$subharga=$pecah["harga_produk"]*$Jumlah;
+
+ 						// untuk menampilkan data
+ 						?>
+ 						<tr>
+ 							<td><?php echo $id; ?></td>
+ 							<td><img src="foto_produk/<?php echo $pecah['foto_produk'];?>"></td>
+ 							<td><?php echo $pecah['nama_produk']; ?></td>
+ 							<td>RP <?php echo number_format($pecah['harga_produk']); ?></td>
+ 							<td><?php echo $Jumlah ; ?></td>
+ 							<td>RP <?php echo number_format($subharga); ?></td>
+ 							<td>
+ 								<a href="hapuskeranjang.php?id=<?php echo $id_produk ?>">hapus</a>
+ 							</td>
+ 						</tr>
+ 						<?php $id++; ?>
+ 						<?php endforeach ?>
+ 					</tbody>	
+ 				</table>
+ 				<div class="continue">
+ 					<button class="satu"><a href="index.php">Continue Shopping</a></button>
+ 					<button class="dua"><a href="checkout.php">Checkout</a></button>
+ 				</div>
+ 			</div>
+ 		</section>
+
+
+ 		<style type="text/css">
+
+ 			.container table{
+ 				text-align: center;
+ 				margin-left: 280px;
+ 				border: 1px solid white;
+ 			}
+
+ 			.container h1{
+ 				margin-left: 280px;
+ 				font-family: verdana;
+ 				color: #1FBBA6;
+ 			}
+
+ 			.container span{
+ 				color: pink;
+ 			}
+
+ 			.no{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			img{
+ 				width: 150px;
+
+ 			}
+
+ 			.foto{
+ 				padding-right: 70px;
+ 				padding-left: 70px;
+ 			}
+
+ 			.produk{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.harga{
+ 				padding-right: 40px;
+ 				padding-left: 40px;
+ 			}
+
+ 			.jumlah{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.subharga{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.aksi{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.continue .satu{
+ 				margin-left: 280px;
+ 			}
+ 			.container button{
+ 				margin-top: 20px;
+ 				width: 200px;
+ 				height: 30px;
+ 				background-color: #1FBBA6;
+				border: 2px solid #1FBBA6;
+ 			}
+
+
+ 			.container .continue a{
+ 				text-decoration: none;
+ 				font-family: verdana;
+ 				color:white;
+ 			}
+
+ 			.container td a{
+ 				text-decoration: none;
+ 				color: black;
+
+ 			}
+
+ 			.container td a:hover{
+ 				color: #1FBBA6;
+ 			}
+
+ 			.container th{
+ 				padding-top: 10px;
+ 				padding-bottom: 10px;
+ 			}
+
+ 		</style>
+
+
+ 		<br><br><br><br>
+ 		<?php 
+
+ 		include "footer.php";
+
+ 		 ?>
+ 
+ </body>
+ </html>

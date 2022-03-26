@@ -1,0 +1,65 @@
+<?php 
+	include 'koneksi.php';
+	include 'menu.php';
+ ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>daftar pelanggan</title>
+</head>
+<body>
+	<link rel="stylesheet" type="text/css" href="user.css">
+	<div class="container">
+		<form method="POST">
+		<label for="email">Email</label>
+		<input type="email" name="email" required>
+		<br>
+		<label for="password">Password</label>
+		<input type="password" name="password">
+		<br>
+		<label for="nama">Nama</label>
+		<input type="text" name="nama">
+		<br>
+		<label for>Telepon</label>
+		<input type="number" name="telepon">
+		<br>
+		<label for="alamat">Alamat</label>
+		<textarea name="alamat"></textarea>
+		<br>
+		<button name="daftar">Daftar</button>
+	</form>
+
+	<?php 
+
+		if (isset($_POST['daftar'])) 
+		{
+			//menganbil isi form
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			$nama = $_POST['nama'];
+			$telepon = $_POST['telepon'];
+			$alamat = $_POST['alamat'];
+
+			$ambil = mysqli_query($koneksi, "SELECT * FROM pelanggan WHERE email_pelanggan = '$email'");
+
+			$yangcocok = mysqli_num_rows($ambil);
+
+			if ($yangcocok==1) 
+			{
+				echo "<script>alert('pendaftaran gagal (email yang anda masukkan telah terdaftar )')</script>";
+				echo "<script>location = 'index.php';</script>";
+			}
+			else{
+				mysqli_query($koneksi, "INSERT INTO pelanggan (email_pelanggan,password_pelanggan,nama_pelanggan,telepon_pelanggan,alamat_pelanggan) VALUES('$email','$password','$nama','$telepon','$alamat') ");
+
+				echo "<script>alert('pendaftaran anda sukses (silahkan pulang)')</script>";
+				echo "<script>location = 'index.php';</script>";
+			}
+		}
+
+	 ?>
+	</div>
+
+</body>
+</html>

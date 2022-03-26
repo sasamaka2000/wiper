@@ -1,0 +1,199 @@
+<?php 
+session_start();
+include "koneksi.php";
+ ?>
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title>tagihan penbayaran</title>
+ </head>
+ <body>
+
+ 	<!-- navbar -->
+	<?php 
+		include "menu.php";
+	 ?>
+	<!-- tutup navbar -->
+
+<!-- diambil dari deail yang ada di folder admin -->
+		<div class="container">
+			<section>
+			<div class="content">
+				<h1>Detail<span class="satu">pembeli</span></h1>
+<?php 
+
+	$ambil=mysqli_query($koneksi,"SELECT * FROM pembelian JOIN pelanggan ON pembelian.id_pelanggan=pelanggan.id_pelanggan WHERE pembelian.id_pembelian = '$_GET[id]'"); 
+	//menghubungkan dengan tabel pelanggan untuk memanggin kolum nama pelanggan
+
+	$detail=mysqli_fetch_assoc($ambil);
+ ?>
+<!-- Detail pembelian -->
+
+
+ <div class="detail">
+ 	<span>Nama</span>
+ 	<div class="nama">
+ 	<p><?php echo $detail['nama_pelanggan'] ?></p>
+ </div>
+ <br>
+
+<span>Email</span>
+<div class="email">
+	<p>
+	 <?php echo $detail['email_pelanggan']; ?><br>
+</p>
+</div>
+<br>
+
+<span>Telepon</span>
+<div class="telepon">
+	<p>
+	 <?php echo $detail ['telepon_pelanggan']; ?>
+	</p>
+</div>
+<br>
+
+<span>Tanggal</span>
+<div class="tanggal">
+	<p>
+	 <?php echo $detail['tanggal_pembelian']; ?><br>
+</p>
+</div>
+<br>
+
+<span>Total</span>
+<div class="total">
+	<p>
+		 RP:<?php echo number_format($detail['total_pembelian']); ?>
+	</p>
+</div>
+<br>
+
+				<div class="rek">
+					<p>silahkan melakukan pembayaran RP: <?php echo number_format($detail['total_pembelian']); ?> ke</p>
+					<strong>BANK MANDIRI 137-001088-3276 AN. DISTRO</strong>
+				</div>
+ </div>
+			</div>
+		</section>
+		</div>
+
+
+
+		<style type="text/css">
+			.container{
+				margin-top: 180px;
+			}
+
+ 			.container table{
+ 				text-align: center;
+ 				margin-left: 110px;
+ 				border: 1px solid white;
+ 			}
+
+ 			.container table tr td img{
+ 				width: 200px;
+ 			}
+
+ 			.foto{
+ 				padding-right: 70px;
+ 				padding-left: 70px;
+ 				padding: 10px 0px
+ 			}
+
+ 			.produk{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.harga{
+ 				padding-right: 40px;
+ 				padding-left: 40px;
+ 			}
+
+ 			.jumlah{
+ 				padding-right: 30px;
+ 				padding-left: 30px;
+ 			}
+
+ 			.subtotal{
+ 				padding-right: 35px;
+ 				padding-left: 35px;
+ 			}
+
+ 			.content h1{
+ 				margin-left: 110px;
+ 				font-family: verdana;
+ 				color: #1FBBA6;
+ 			}
+
+ 			.satu{
+ 				color: pink;
+ 			}
+
+ 			.detail{
+ 				width: 60%;
+ 				background-color: white;
+ 				margin-left: 200px;
+ 				margin-top: 35px;
+ 				/*position: relative;
+ 				left: 700px;
+ 				bottom: 300px;*/
+ 			}
+
+ 			.nama{
+ 				border: 1px solid #bdc3c7;
+ 				margin-bottom: 8px;
+ 				margin-top: 6px;
+ 				height: 40px;
+
+ 			}
+
+ 			.email{
+ 				border: 1px solid #bdc3c7;
+ 				margin-bottom: 8px;
+ 				margin-top: 6px;
+ 				height: 40px;
+ 			}
+
+ 			.telepon{
+ 				border: 1px solid #bdc3c7;
+ 				margin-bottom: 8px;
+ 				margin-top: 6px;
+ 				height: 40px;
+ 			}
+
+ 			.tanggal{
+ 				border: 1px solid #bdc3c7;
+ 				margin-bottom: 8px;
+ 				margin-top: 6px;
+ 				height: 40px;
+ 			}
+
+ 			.total{
+ 				border: 1px solid #bdc3c7;
+ 				margin-bottom: 8px;
+ 				margin-top: 6px;
+ 				height: 40px;
+ 			}
+
+ 			.rek{
+ 				border: 1px solid black;
+ 				margin-bottom: 8px;
+ 				text-align: center;
+ 				height: 84px;
+ 			}
+
+ 			.detail p{
+ 				padding-top: 10px;
+ 				padding-left: 8px;
+ 			}
+
+
+
+
+		</style>
+ 
+ </body>
+ </html>
